@@ -12,7 +12,7 @@ variable "aws_regions" {
 variable "aws_amis" {
   type = "map"
   default = {
-    virginia    = ""
+    virginia    = "ami-c58c1dd3"
     ohio        = "ami-4191b524"
     california  = "ami-7a85a01a"
     oregon      = "ami-4836a428"
