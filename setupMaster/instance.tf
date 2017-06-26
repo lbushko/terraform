@@ -33,7 +33,7 @@ resource "aws_instance" "host" {
               "sudo service docker start",
               "sudo usermod -a -G docker ec2-user",
               "sudo docker run -dit --name master -p 60000:60000 lbushko/jmeter:jmeter-master /bin/bash",
-              "sudo docker cp flightFX_API_load.jmx master:/jmeter/apache-jmeter-3.2/bin/testName.jmx",
+              "sudo docker cp testName.jmx master:/jmeter/apache-jmeter-3.2/bin/testName.jmx",
               "sudo docker exec -it master /bin/bash",
               "cd /jmeter/apache-jmeter-3.2/bin/",
               "./jmeter -n -t testName.jmx -Djava.rmi.server.hostname=${self.public_ip} -Dclient.rmi.localport=60000 -R${var.slavesIPs} -l ‘reportJmeter.jtl’",
