@@ -3,15 +3,19 @@ variable "aws_ami_id" {}
 variable "aws_instance_name" {}
 
 variable "aws_instance_type" {
-  default       = "t2.micro" }
+  default = "t2.micro" }
 
 variable "aws_access_key" {
-  default       = "xxx" }
+  default = "xxx" }
 
 variable "aws_secret_key" {
-  default       = "xxx"
+  default = "xxx"
+}
+
+variable "aws_security_token" {
+  default = "xxx"
 }
 
 variable "key_name" {
-  default       = "keyLoadlb"
+  default = "keyLoadlb"
 }

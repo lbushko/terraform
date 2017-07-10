@@ -17,8 +17,9 @@ resource "aws_instance" "host" {
               "sudo docker run -dit -e LOCALIP=${self.public_ip} -p 1099:1099 -p 50000:50000 lbushko/jmeter:jmeter-serverAWS /bin/bash",
       ]
     connection {
+      type = "ssh"
       user = "ec2-user"
-      private_key = "C:\\Users\\lbushko\\Desktop\\terraform_XXX\\.ssh\\keyLoadlb"
+      private_key = "${file("C:\\Users\\lbushko\\Desktop\\terraform\\.ssh\\keyLoadlb")}"
       host = "${self.public_ip}"
     }
   }

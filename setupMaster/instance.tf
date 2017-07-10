@@ -13,8 +13,9 @@ resource "aws_instance" "host" {
     destination = "/home/ec2-user/flightFX_API_load.jmx"
 
     connection {
+      type = "ssh"
       user = "ec2-user"
-      private_key = "C:\\Users\\lbushko\\Desktop\\terraform_XXX\\.ssh\\keyLoadlb"
+      private_key = "${file("C:\\Users\\lbushko\\Desktop\\terraform\\.ssh\\keyLoadlb")}"
       host = "${self.public_ip}"
     }
   }
@@ -22,8 +23,9 @@ resource "aws_instance" "host" {
   provisioner "remote-exec" {
 
     connection {
+      type = "ssh"
       user = "ec2-user"
-      private_key = "C:\\Users\\lbushko\\Desktop\\terraform_XXX\\.ssh\\keyLoadlb"
+      private_key = "${file("C:\\Users\\lbushko\\Desktop\\terraform\\.ssh\\keyLoadlb")}"
       host = "${self.public_ip}"
     }
 
@@ -34,11 +36,11 @@ resource "aws_instance" "host" {
               "sudo usermod -a -G docker ec2-user",
               "sudo docker run -dit --name master -p 60000:60000 lbushko/jmeter:jmeter-master /bin/bash",
               "sudo docker cp flightFX_API_load.jmx master:/jmeter/apache-jmeter-3.2/bin/flightFX_API_load.jmx",
-              "sudo docker exec -it master /bin/bash",
-              "cd /jmeter/apache-jmeter-3.2/bin/",
-              "./jmeter -n -t flightFX_API_load.jmx -Djava.rmi.server.hostname=${self.public_ip} -Dclient.rmi.localport=60000 -R${var.slavesIPs} -l ‘reportJmeter.jtl’",
-              "exit",
-              "sudo docker cp master:/jmeter/apache-jmeter-3.2/bin/reportJmeter.jtl reportJmeter.jtl"
+//              "sudo docker exec -it master /bin/bash",
+//              "cd /jmeter/apache-jmeter-3.2/bin/",
+              "sudo docker exec -it master /jmeter/apache-jmeter-3.2/bin/jmeter -n -t flightFX_API_load.jmx -Djava.rmi.server.hostname=${self.public_ip} -Dclient.rmi.localport=60000 -R${var.slave01IP},${var.slave02IP},${var.slave03IP} -l ‘reportJmeter.jtl’ /bin/bash",
+//              "exit",
+              "sudo docker cp reportJmeter.jtl master:/jmeter/apache-jmeter-3.2/bin/reportJmeter.jtl"
     ]
   }
 
@@ -47,8 +49,9 @@ resource "aws_instance" "host" {
     destination = "../reportJmeter.jtl"
 
     connection {
+      type = "ssh"
       user = "ec2-user"
-      private_key = "C:\\Users\\lbushko\\Desktop\\terraform_XXX\\.ssh\\keyLoadlb"
+      private_key = "${file("C:\\Users\\lbushko\\Desktop\\terraform\\.ssh\\keyLoadlb")}"
       host = "${self.public_ip}"
     }
   }

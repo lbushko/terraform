@@ -24,5 +24,7 @@ module "master" {
   aws_ami_id        = "${var.aws_amis["ohio"]}"
   aws_region_name   = "${var.aws_regions["ohio"]}"
   aws_instance_name = "${var.aws_instances_names["master"]}"
-  slavesIPs         = ["${module.slave01.aws_instance_ip},${module.slave02.aws_instance_ip},${module.slave03.aws_instance_ip}"]
+  slave01IP         = "${module.slave01.aws_instance_ip}"
+  slave02IP         = "${module.slave02.aws_instance_ip}"
+  slave03IP         = "${module.slave03.aws_instance_ip}"
 }
