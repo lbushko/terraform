@@ -9,8 +9,8 @@ resource "aws_instance" "host" {
   tags { Name                   = "${var.aws_instance_name}" }
 
   provisioner "file" {
-    source = "../flightFX_API_load.jmx"
-    destination = "/home/ec2-user/flightFX_API_load.jmx"
+    source = "../testName.jmx"
+    destination = "/home/ec2-user/testName.jmx"
 
     connection {
       type = "ssh"
@@ -35,10 +35,10 @@ resource "aws_instance" "host" {
               "sudo service docker start",
               "sudo usermod -a -G docker ec2-user",
               "sudo docker run -dit --name master -p 60000:60000 lbushko/jmeter:jmeter-master /bin/bash",
-              "sudo docker cp flightFX_API_load.jmx master:/jmeter/apache-jmeter-3.2/bin/flightFX_API_load.jmx",
+              "sudo docker cp testName.jmx master:/jmeter/apache-jmeter-3.2/bin/testName.jmx",
 //              "sudo docker exec -it master /bin/bash",
 //              "cd /jmeter/apache-jmeter-3.2/bin/",
-              "sudo docker exec -it master /jmeter/apache-jmeter-3.2/bin/jmeter -n -t flightFX_API_load.jmx -Djava.rmi.server.hostname=${self.public_ip} -Dclient.rmi.localport=60000 -R${var.slave01IP},${var.slave02IP},${var.slave03IP} -l ‘reportJmeter.jtl’ /bin/bash",
+              "sudo docker exec -it master /jmeter/apache-jmeter-3.2/bin/jmeter -n -t testName.jmx -Djava.rmi.server.hostname=${self.public_ip} -Dclient.rmi.localport=60000 -R${var.slave01IP},${var.slave02IP},${var.slave03IP} -l ‘reportJmeter.jtl’ /bin/bash",
 //              "exit",
               "sudo docker cp reportJmeter.jtl master:/jmeter/apache-jmeter-3.2/bin/reportJmeter.jtl"
     ]
