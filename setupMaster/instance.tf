@@ -36,23 +36,13 @@ resource "aws_instance" "host" {
               "sudo usermod -a -G docker ec2-user",
               "sudo docker run -dit --name master -p 60000:60000 lbushko/jmeter:jmeter-master /bin/bash",
               "sudo docker cp testName.jmx master:/jmeter/apache-jmeter-3.2/bin/testName.jmx",
-//              "sudo docker exec -it master /bin/bash",
-//              "cd /jmeter/apache-jmeter-3.2/bin/",
-              "sudo docker exec -it master /jmeter/apache-jmeter-3.2/bin/jmeter -n -t testName.jmx -Djava.rmi.server.hostname=${self.public_ip} -Dclient.rmi.localport=60000 -R${var.slave01IP},${var.slave02IP},${var.slave03IP} -l ‘reportJmeter.jtl’ /bin/bash",
-//              "exit",
-              "sudo docker cp reportJmeter.jtl master:/jmeter/apache-jmeter-3.2/bin/reportJmeter.jtl"
+              "sudo docker exec -it master /bin/bash /jmeter/apache-jmeter-3.2/bin/jmeter -n -t /jmeter/apache-jmeter-3.2/bin/testName.jmx -Djava.rmi.server.hostname=${self.public_ip} -Dclient.rmi.localport=60000 -R${var.slave01IP},${var.slave02IP},${var.slave03IP} -l /jmeter/apache-jmeter-3.2/bin/reportJmeter.jtl",
+              "sudo docker cp master:/jmeter/apache-jmeter-3.2/bin/reportJmeter.jtl reportJmeter.jtl"
     ]
   }
 
-  provisioner "file" {
-    source = "/home/ec2-user/reportJmeter.jtl"
-    destination = "../reportJmeter.jtl"
-
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      private_key = "${file("C:\\Users\\lbushko\\Desktop\\terraform\\.ssh\\keyLoadlb")}"
-      host = "${self.public_ip}"
-    }
+  provisioner "local-exec" {
+    command = "scp -oStrictHostKeyChecking=no -i C:\\Users\\lbushko\\Desktop\\terraform\\.ssh\\keyLoadlb ec2-user@${self.public_ip}:/home/ec2-user/reportJmeter.jtl C:\\Users\\lbushko\\Desktop\\terraform\\reportJmeter.jtl"
   }
+
 }
